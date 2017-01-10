@@ -1,6 +1,9 @@
 {
   "name": "application-api",
   "version": "0.0.1",
+  "engines": {
+    "node": ">=6.0.0"
+  },
   "private": true,
   "description": "New Swagger API Project",
   "keywords": [],
@@ -9,10 +12,13 @@
   "main": "app.js",
   "dependencies": {
     "express": "^4.12.3",
+    "nconf": "^0.8.4",
+    "promise": "^7.1.1",
     "swagger-express-mw": "^0.1.0",
     "swagger-tools": "^0.10.1"
   },
   "devDependencies": {
+    "lokijs": "^1.4.2",
     "should": "^7.1.0",
     "supertest": "^1.0.0"
   },

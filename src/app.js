@@ -20,6 +20,8 @@ SwaggerExpress.create(swaggerExpressConfig, function(err, swaggerExpress) {
 		throw err;
 	}
 
+	require('./services/data-service').tables.initialize();
+
 	// Add swagger-ui (This must be before swaggerExpress.register)
 	app.use(SwaggerUi(swaggerExpress.runner.swagger, swaggerUiOptions));
 
