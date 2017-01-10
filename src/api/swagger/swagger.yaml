@@ -1,0 +1,138 @@
+swagger: "2.0"
+info:
+  version: "0.0.1"
+  title: Application API
+host: localhost:10010
+basePath: /api/v1
+schemes:
+  - http
+  - https
+consumes:
+  - application/json
+produces:
+  - application/json
+  - text/plain
+paths:
+  /applications:
+    x-swagger-router-controller: application-controller
+    get:
+      description: Returns list of applications
+      tags:
+        - Applications
+      operationId: getApplications
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/ApplicationsList"
+    post:
+      description: Inserts a new application
+      tags:
+        - Applications
+      operationId: insertApplication
+      parameters:
+        - name: entity
+          in: body
+          description: new application entity to be inserted
+          required: true
+          schema:
+            $ref: "#/definitions/Application"
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/Application"
+  /applications/{id}:
+    x-swagger-router-controller: application-controller
+    get:
+      description: Returns application entity by id
+      tags:
+        - Applications
+      operationId: getApplicationById
+      parameters:
+        - name: id
+          in: path
+          description: Application unique identifier
+          required: true
+          type: string
+          format: uuid
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/Application"
+        "404":
+          description: Application entity not found
+    put:
+      description: Updates application entity
+      tags:
+        - Applications
+      operationId: updateApplication
+      parameters:
+        - name: id
+          in: path
+          description: Application unique identifier
+          required: true
+          type: string
+          format: uuid
+        - name: entity
+          in: body
+          description: new application entity to be inserted
+          required: true
+          schema:
+            $ref: "#/definitions/Application"
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/Application"
+        "404":
+          description: Application entity not found
+    delete:
+      description: Deletes application entity by id
+      tags:
+        - Applications
+      operationId: deleteApplicationById
+      parameters:
+        - name: id
+          in: path
+          description: Application unique identifier
+          required: true
+          type: string
+          format: uuid
+      responses:
+        "200":
+          description: Success
+        "404":
+          description: Application entity not found
+  /swagger: 
+    x-swagger-pipe: swagger_raw
+definitions:
+  Application:
+    type: object
+    required: [ id, title ]
+    properties:
+      id:
+        type: string
+        format: uuid
+        description: unique application id
+      title:
+        type: string
+        description: application display title
+        maxLength: 100
+      iconUrl:
+        type: string
+        description: application icon to display
+      webUrl:
+        type: string
+        description: web url of current application
+      embedUrl:
+        type: string
+        description: url to be embeded inside iframe
+      embedContentUrl:
+        type: string
+        description: html content url to be embeded inside any html markup
+  ApplicationsList:
+    type: array
+    items:
+      $ref: "#/definitions/Application"
