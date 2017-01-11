@@ -11,7 +11,6 @@ switch (config.environment) {
 		break;
 	default:
 		throw new Error('Unsupported configuration value for "Environment"');
-		break;
 }
 
 module.exports = service;
