@@ -9,6 +9,9 @@ service.names = {
 service.initialize = function() {
 };
 
+service.purge = function() {
+};
+
 service.getAllEntities = function(tableName) {
 };
 

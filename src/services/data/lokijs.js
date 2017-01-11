@@ -13,6 +13,10 @@ service.initialize = function() {
 	db.addCollection(service.names.applications);
 };
 
+service.purge = function() {
+	db.removeCollection(service.names.applications);
+};
+
 service.getAllEntities = function(tableName) {
 	return new Promise(function(resolve, reject) {
 		var table = db.getCollection(tableName);

@@ -1,4 +1,4 @@
-var expect = require('expect.js');
+var should = require('should');
 
 var methods = [
 	'initialize',
@@ -7,7 +7,8 @@ var methods = [
 	'deleteEntityById',
 	'insertEntity',
 	'updateEntity',
-	'isIdExists'
+	'isIdExists',
+	'purge'
 ];
 
 var implementations = [
@@ -25,11 +26,11 @@ describe('interface', function() {
 				describe(object.name, function() {
 					methods.forEach(function(methodName) {
 
-						it(methodName, function() {
-							expect(instance).to.have.property(methodName);
+						it('has method' + methodName, function() {
+							instance.should.have.property(methodName);
 
 							var method = instance[methodName];
-							expect(method).to.be.a('function');
+							method.should.be.a.Function;
 						});
 
 					});

@@ -9,6 +9,10 @@ var zip = require('gulp-zip');
 var sourceFiles = ['api/**/*.js', 'services/**/*.js'];
 var testFiles = ['test/**/*.js'];
 
+gulp.doneCallback = function (err) {
+	process.exit(err ? 1 : 0);
+};
+
 gulp.task('test', function() {
 	return gulp.src(['test/**/*.js'])
 		.pipe(mocha());
