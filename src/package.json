@@ -1,6 +1,9 @@
 {
   "name": "application-api",
   "version": "0.0.1",
+  "engines": {
+    "node": ">=6.0.0"
+  },
   "private": true,
   "description": "New Swagger API Project",
   "keywords": [],
@@ -9,12 +12,24 @@
   "main": "app.js",
   "dependencies": {
     "express": "^4.12.3",
+    "nconf": "^0.8.4",
+    "promise": "^7.1.1",
     "swagger-express-mw": "^0.1.0",
     "swagger-tools": "^0.10.1"
   },
   "devDependencies": {
+    "chai": "^3.0.0",
+    "dotenv": "^1.2.0",
+    "gulp": "^3.9.1",
+    "gulp-istanbul": "^1.1.1",
+    "gulp-mocha": "^3.0.1",
+    "gulp-zip": "^3.2.0",
+    "lokijs": "^1.4.2",
+    "mocha": "^2.2.5",
+    "request": "^2.58.0",
     "should": "^7.1.0",
-    "supertest": "^1.0.0"
+    "supertest": "^1.0.0",
+    "z-schema": "^3.12.0"
   },
   "scripts": {
     "start": "node app.js",
