@@ -12,8 +12,8 @@ describe('controllers', function() {
 		tables.purge();
 		tables.initialize();
 
-		tables.insertEntity(tables.names.applications, { id: "1", title: "dummy 1", iconUrl: 'http://contoso.com/logo.png' });
-		tables.insertEntity(tables.names.applications, { id: "2", title: "dummy 2", iconUrl: 'http://contoso.com/logo.png' });
+		tables.insertEntity(tables.names.applications, { id: "1", title: "dummy 1", iconUrl: 'http://contoso.com/logo.png', webUrl: 'http://contoso.com' });
+		tables.insertEntity(tables.names.applications, { id: "2", title: "dummy 2", iconUrl: 'http://contoso.com/logo.png', webUrl: 'http://contoso.com' });
 	});
 
 	describe('application-controller', function() {

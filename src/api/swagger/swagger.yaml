@@ -79,7 +79,7 @@ paths:
           format: uuid
         - name: entity
           in: body
-          description: new application entity to be inserted
+          description: application entity to be updated
           required: true
           schema:
             $ref: "#/definitions/Application"
@@ -112,7 +112,7 @@ paths:
 definitions:
   Application:
     type: object
-    required: [ id, title ]
+    required: [ id, title, webUrl ]
     properties:
       id:
         type: string
@@ -122,18 +122,14 @@ definitions:
         type: string
         description: application display title
         maxLength: 100
-      iconUrl:
-        type: string
-        description: application icon to display
       webUrl:
         type: string
+        format: url
         description: web url of current application
-      embedUrl:
+      iconUrl:
         type: string
-        description: url to be embeded inside iframe
-      embedContentUrl:
-        type: string
-        description: html content url to be embeded inside any html markup
+        format: url
+        description: application icon to display
   ApplicationsList:
     type: array
     items:
