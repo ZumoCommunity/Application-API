@@ -31,7 +31,7 @@ service.getEntityById = function(tableName, id) {
 	return new Promise(function(resolve, reject) {
 		var table = db.getCollection(tableName);
 
-		var entity = table.findOne({ "id": id });
+		var entity = table.findOne({ 'id': id });
 
 		resolve(entity);
 	});
@@ -41,7 +41,7 @@ service.deleteEntityById = function(tableName, id) {
 	return new Promise(function(resolve, reject) {
 		var table = db.getCollection(tableName);
 
-		var entity = table.findOne({ "id": id });
+		var entity = table.findOne({ 'id': id });
 
 		table.remove(entity);
 		resolve();
@@ -75,13 +75,11 @@ service.updateEntity = function(tableName, newEntity) {
 };
 
 service.isIdExists = function(tableName, id) {
-	return new Promise(function(resolve, reject) {
-		var table = db.getCollection(tableName);
+	var table = db.getCollection(tableName);
 
-		var entity = table.findOne({ "id": id });
+	var entity = table.findOne({ 'id': id });
 
-		resolve(entity != null);
-	});
+	return Promise.resolve(entity != null);
 };
 
 module.exports = service;
