@@ -12,6 +12,7 @@ consumes:
 produces:
   - application/json
   - text/plain
+  - text/html
 paths:
   /applications:
     x-swagger-router-controller: application-controller
@@ -107,6 +108,64 @@ paths:
           description: Success
         "404":
           description: Application entity not found
+  /forms:
+    x-swagger-router-controller: form-controller
+    get:
+      description: Returns list of forms
+      tags:
+        - Forms
+      operationId: getAllForms
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/FormsList"
+  /forms/{id}:
+    x-swagger-router-controller: form-controller
+    get:
+      description: Returns form entity by id
+      tags:
+        - Forms
+      operationId: getFormById
+      parameters:
+        - name: id
+          in: path
+          description: Form unique identifier
+          required: true
+          type: string
+          format: uuid
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/Form"
+        "404":
+          description: Form entity not found
+  /forms/{id}/render:
+    x-swagger-router-controller: render-controller
+    post:
+      description: Inserts a new application
+      tags:
+        - Forms
+      operationId: renderForm
+      parameters:
+        - name: id
+          in: path
+          description: Form unique identifier
+          required: true
+          type: string
+          format: uuid
+        - name: parameters
+          in: body
+          description: Form render parameters
+          required: true
+          schema:
+            $ref: "#/definitions/FormRenderParametersList"
+      responses:
+        "200":
+          description: Success
+          schema:
+            type: string
   /swagger: 
     x-swagger-pipe: swagger_raw
 definitions:
@@ -134,3 +193,63 @@ definitions:
     type: array
     items:
       $ref: "#/definitions/Application"
+  RequirementCss:
+    type: object
+    required: [ name ]
+    properties:
+      name:
+        type: string
+        enum:
+          - bootstrap
+          - font-awesome
+      version:
+        type: string
+  RequirementJs:
+    type: object
+    required: [ name ]
+    properties:
+      name:
+        type: string
+        enum:
+          - jquery
+          - bootstrap
+      version:
+        type: string
+  Form:
+    type: object
+    required: [ id, name ]
+    properties:
+      id:
+        type: string
+        format: uuid
+      name:
+        type: string
+        maxLength: 100
+      css:
+        type: array
+        items:
+          $ref: "#/definitions/RequirementCss"
+      js:
+        type: array
+        items:
+          $ref: "#/definitions/RequirementJs"
+      parameters:
+        type: array
+        items:
+          type: string
+  FormsList:
+    type: array
+    items:
+      $ref: "#/definitions/Form"
+  FormRenderParameter:
+    type: object
+    required: [ key, value ]
+    properties:
+      key:
+        type: string
+      value:
+        type: string
+  FormRenderParametersList:
+    type: array
+    items:
+      $ref: "#/definitions/FormRenderParameter"
