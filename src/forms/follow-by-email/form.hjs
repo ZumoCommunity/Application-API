@@ -1,0 +1,7 @@
+{{<layout}}
+{{$content}}
+
+<h1>Follow by email</h1>
+
+{{/content}}
+{{/layout}}

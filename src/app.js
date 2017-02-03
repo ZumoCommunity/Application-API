@@ -1,5 +1,7 @@
 'use strict';
 
+var Promise = require('promise');
+
 var SwaggerExpress = require('swagger-express-mw');
 var app = require('express')();
 
@@ -20,13 +22,16 @@ SwaggerExpress.create(swaggerExpressConfig, function(err, swaggerExpress) {
 		throw err;
 	}
 
-	require('./services/data-service').tables.initialize();
+	Promise.all([
+		require('./services/data-service').tables.initialize(),
+		require('./services/app/form-service').initialize()
+	]).then(function() {
+		// Add swagger-ui (This must be before swaggerExpress.register)
+		app.use(SwaggerUi(swaggerExpress.runner.swagger, swaggerUiOptions));
 
-	// Add swagger-ui (This must be before swaggerExpress.register)
-	app.use(SwaggerUi(swaggerExpress.runner.swagger, swaggerUiOptions));
+		swaggerExpress.register(app);
 
-	swaggerExpress.register(app);
-
-	var port = process.env.PORT || 10010;
-	app.listen(port);
+		var port = process.env.PORT || 10010;
+		app.listen(port);
+	});
 });
