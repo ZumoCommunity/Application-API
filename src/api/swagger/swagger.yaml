@@ -34,7 +34,7 @@ paths:
       parameters:
         - name: entity
           in: body
-          description: new application entity to be inserted
+          description: New application entity to be inserted
           required: true
           schema:
             $ref: "#/definitions/Application"
@@ -80,7 +80,7 @@ paths:
           format: uuid
         - name: entity
           in: body
-          description: application entity to be updated
+          description: Application entity to be updated
           required: true
           schema:
             $ref: "#/definitions/Application"
