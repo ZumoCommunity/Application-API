@@ -1,4 +1,4 @@
-require('promise');
+var Promise = require('promise');
 
 var appService = require('./../../services/app-service');
 
