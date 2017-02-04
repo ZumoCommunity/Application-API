@@ -16,5 +16,7 @@
 	<hr/>
 	{{> content}}
 	<hr/>
+
+	<script src="/node_modules/knockout/build/output/knockout-latest.js"></script>
 </body>
 </html>

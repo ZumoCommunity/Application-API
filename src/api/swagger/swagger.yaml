@@ -218,6 +218,7 @@ definitions:
         enum:
           - jquery
           - bootstrap
+          - knockout
       version:
         type: string
   Form:

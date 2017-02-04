@@ -28,6 +28,7 @@
     "gulp-istanbul": "^1.1.1",
     "gulp-mocha": "^3.0.1",
     "gulp-zip": "^3.2.0",
+    "knockout": "^3.4.1",
     "lokijs": "^1.4.2",
     "mocha": "^2.2.5",
     "request": "^2.58.0",
