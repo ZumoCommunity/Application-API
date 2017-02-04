@@ -18,44 +18,49 @@ app.get('/', function (req, res) {
 app.get('/:formId', function (req, res) {
 	var formId = req.params.formId;
 
-	var promises = [];
-	promises.push(formSerice.render(formId, 'en-US'));
-	promises.push(formSerice.loadTemplate('base.hjs'));
-
-	Promise.all(promises)
-		.then(function (results) {
-			var form = results[0];
-			var layout = results[1];
-
-			var html = mustache.render(layout, {}, { content: form });
-
+	renderForm(formId, 'en-US', {})
+		.then(function(html) {
 			res.send(html);
-		});
+		})
 });
 
 app.post('/:formId', function (req, res) {
 	var formId = req.params.formId;
 	var langId = req.body.langId || 'en-US';
 
-	var promises = [];
-	promises.push(formSerice.render(formId, langId));
-	promises.push(formSerice.loadTemplate('base.hjs'));
+	renderForm(formId, langId, {})
+		.then(function(html) {
+			res.send(html);
+		})
+});
 
-	Promise.all(promises)
+function renderForm(formId, lang, properties) {
+	var promises = [];
+	promises.push(formSerice.render(formId, lang));
+	promises.push(formSerice.loadTemplate('base.hjs'));
+	promises.push(formSerice.getEntityById(formId));
+
+	return Promise.all(promises)
 		.then(function (results) {
-			var form = results[0];
+			var formHtml = results[0];
 			var layout = results[1];
+			var form = results[2];
 
 			var model = {
-				formUrl: '/' + formId,
-				langId: langId
+				langId: lang,
+				languages: form.languages.map(function(language) {
+					return {
+						selected: language == lang,
+						language: language
+					}
+				})
 			};
 
-			var html = mustache.render(layout, model, { content: form });
+			var html = mustache.render(layout, model, { content: formHtml });
 
-			res.send(html);
+			return Promise.resolve(html);
 		});
-});
+}
 
 app.listen(4000, function () {
 	console.log('Forms host app listening on port 4000!');
