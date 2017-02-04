@@ -142,7 +142,7 @@ paths:
         "404":
           description: Form entity not found
   /forms/{id}/render/{lang}:
-    x-swagger-router-controller: render-controller
+    x-swagger-router-controller: form-controller
     post:
       description: Renders a form
       tags:
