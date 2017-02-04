@@ -1,6 +1,17 @@
 var Promise = require('promise');
+var minify = require('html-minifier').minify;
 
 var appService = require('./../../services/app-service');
+
+function getMinifiedHtml(html){
+	return minify(html, {
+		removeComments: true,
+		collapseWhitespace: true,
+		minifyJS: true,
+		minifyCSS: true,
+		minifyURLs: true
+	});
+}
 
 module.exports = {
 	getAllForms: function(req, res) {
@@ -21,6 +32,15 @@ module.exports = {
 	},
 
 	renderForm: function(req, res) {
+		var id = req.swagger.params.id.value;
+		var lang = req.swagger.params.lang.value;
 
+		appService.forms.render(id, lang, {})
+			.then(function(html) {
+				html = getMinifiedHtml(html);
+				res.send(html);
+			}, function(error) {
+				res.status(500).end();
+			});
 	}
 };
