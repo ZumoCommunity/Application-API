@@ -31,11 +31,16 @@ describe('interface', function() {
 
 							var method = instance[methodName];
 							method.should.be.a.Function;
+						});
+
+						it('method ' + methodName + ' return promise', function() {
+							instance.should.have.property(methodName);
+
+							var method = instance[methodName];
 
 							var methodThen = method()['then'];
 							methodThen.should.be.a.Function;
 						});
-
 					});
 				});
 

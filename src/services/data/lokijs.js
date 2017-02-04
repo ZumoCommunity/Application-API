@@ -19,6 +19,8 @@ service.initialize = function() {
 
 service.purge = function() {
 	db.removeCollection(service.names.applications);
+
+	return Promise.resolve();
 };
 
 service.getAllEntities = function(tableName) {
@@ -53,11 +55,13 @@ service.deleteEntityById = function(tableName, id) {
 };
 
 service.insertEntity = function(tableName, newEntity) {
-	var table = db.getCollection(tableName);
+	return new Promise(function(resolve, reject) {
+		var table = db.getCollection(tableName);
 
-	table.insert(newEntity);
+		table.insert(newEntity);
 
-	return Promise.resolve(newEntity);
+		resolve(newEntity);
+	});
 };
 
 service.updateEntity = function(tableName, newEntity) {
@@ -81,11 +85,13 @@ service.updateEntity = function(tableName, newEntity) {
 };
 
 service.isIdExists = function(tableName, id) {
-	var table = db.getCollection(tableName);
+	return new Promise(function(resolve, reject) {
+		var table = db.getCollection(tableName);
 
-	var entity = table.findOne({ 'id': id });
+		var entity = table.findOne({ 'id': id });
 
-	return Promise.resolve(entity != null);
+		resolve(entity != null);
+	});
 };
 
 module.exports = service;
