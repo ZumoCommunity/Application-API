@@ -10,6 +10,12 @@ service.names = {
 	forms: 'forms'
 };
 
+function removeMetadataProperties(entity) {
+	delete entity['meta'];
+	delete entity['$loki'];
+	return entity;
+}
+
 service.initialize = function() {
 	db.addCollection(service.names.applications);
 	db.addCollection(service.names.forms);
@@ -27,7 +33,9 @@ service.getAllEntities = function(tableName) {
 	return new Promise(function(resolve, reject) {
 		var table = db.getCollection(tableName);
 
-		var entities = table.find({});
+		var entities = table
+			.find({})
+			.map(removeMetadataProperties);
 
 		resolve(entities);
 	});
@@ -38,6 +46,8 @@ service.getEntityById = function(tableName, id) {
 		var table = db.getCollection(tableName);
 
 		var entity = table.findOne({ 'id': id });
+
+		entity = removeMetadataProperties(entity);
 
 		resolve(entity);
 	});

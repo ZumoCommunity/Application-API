@@ -144,7 +144,7 @@ paths:
   /forms/{id}/render/{lang}:
     x-swagger-router-controller: render-controller
     post:
-      description: Inserts a new application
+      description: Renders a form
       tags:
         - Forms
       operationId: renderForm

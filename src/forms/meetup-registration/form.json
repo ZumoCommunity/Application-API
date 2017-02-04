@@ -1,9 +1,8 @@
 {
     "id": "898112fa-5aa1-4c25-8f42-ffae4cc8712b",
     "name": "Meetup registration",
-    "path": "meetup-registration",
     "css" : [
-        { "name": "bootstrap", "version": "" }
+        { "name": "bootstrap", "version": "3.3.7" }
     ],
     "js": [
     ],

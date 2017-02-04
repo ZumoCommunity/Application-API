@@ -10,12 +10,16 @@ var mustache = require('mustache');
 
 var formsRoot = path.join(__dirname, '..', '..', 'forms');
 
+function getFormPath(form) {
+	return form.name.toLowerCase().replace(' ', '-');
+}
+
 service.render = function(formId, language, parameters) {
 	return new Promise(function(resolve, reject) {
 		service
 			.getEntityById(formId)
 			.then(function(form) {
-				var templatePath = path.join(form.path, 'form.hjs');
+				var templatePath = path.join(getFormPath(form), 'form.hjs');
 
 				var promises = [];
 				promises.push(loadFormLanguage(form, language));
@@ -40,7 +44,7 @@ service.render = function(formId, language, parameters) {
 
 function loadFormLanguage(form, lang) {
 	return new Promise(function(resolve, reject) {
-		var langFile = path.join(formsRoot, form.path, 'lang', lang + '.json');
+		var langFile = path.join(formsRoot, getFormPath(form), 'lang', lang + '.json');
 		fs.readFile(langFile, 'utf8', function(err, content) {
 			if (err) {
 				reject(err);
