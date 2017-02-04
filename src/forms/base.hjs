@@ -4,9 +4,17 @@
 	<meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="/node_modules/bootstrap/dist/css/bootstrap.css" rel="stylesheet" type="text/css">
 </head>
-<body>
-{{$content}}
-{{/content}}
+<body class="container-fluid">
+	<form method="post" action="{{ formUrl }}">
+		<h4>Parameters:</h4>
+		<input type="text" name="langId" placeholder="Language code" class="form-control" value="{{ langId }}" />
+		<button type="submit" class="btn btn-primary">Reload</button>
+	</form>
+	<hr/>
+	{{> content}}
+	<hr/>
 </body>
 </html>

@@ -6,9 +6,64 @@ var service = _base.generateAppService(lokijs.names.forms, lokijs);
 var Promise = require('promise');
 var fs = require('fs');
 var path = require('path');
+var mustache = require('mustache');
 
 var formsRoot = path.join(__dirname, '..', '..', 'forms');
-console.log(formsRoot);
+
+service.render = function(formId, language, parameters) {
+	return new Promise(function(resolve, reject) {
+		service
+			.getEntityById(formId)
+			.then(function(form) {
+				var templatePath = path.join(form.path, 'form.hjs');
+
+				var promises = [];
+				promises.push(loadFormLanguage(form, language));
+				promises.push(service.loadTemplate(templatePath));
+
+				return Promise.all(promises);
+			})
+			.then(function(responses) {
+				var lang = responses[0];
+				var template = responses[1];
+
+				var model = {
+					Lang: lang
+				};
+
+				var html = mustache.render(template, model);
+
+				resolve(html);
+			});
+	});
+};
+
+function loadFormLanguage(form, lang) {
+	return new Promise(function(resolve, reject) {
+		var langFile = path.join(formsRoot, form.path, 'lang', lang + '.json');
+		fs.readFile(langFile, 'utf8', function(err, content) {
+			if (err) {
+				reject(err);
+				return;
+			}
+
+			resolve(JSON.parse(content));
+		});
+	});
+}
+
+service.loadTemplate = function(templatePath) {
+	return new Promise(function(resolve, reject) {
+		var fullPath = path.join(formsRoot, templatePath);
+		fs.readFile(fullPath, 'utf8', function(err, content) {
+			if (err) {
+				reject(err);
+				return;
+			}
+			resolve(content);
+		});
+	});
+};
 
 function loadForms() {
 	return new Promise(function(resolve, reject) {
@@ -58,7 +113,9 @@ function loadForms() {
 				return !!formFolder;
 			})
 			.map(function(formFolder) {
-				return new Promise(function(resolve, reject) {
+				var promises = [];
+
+				promises.push(new Promise(function(resolve, reject) {
 					var file = path.join(formFolder, 'form.json');
 					fs.readFile(file, 'utf8', function(err, content) {
 						if (err) {
@@ -68,9 +125,35 @@ function loadForms() {
 
 						resolve(JSON.parse(content));
 					});
-				});
+				}));
+
+				promises.push(new Promise(function(resolve, reject) {
+					var langRoot = path.join(formFolder, 'lang');
+					fs.readdir(langRoot, function(err, files) {
+						if (err) {
+							reject(err);
+							return;
+						}
+
+						var languages = files.map(function(file) {
+							return file.replace('.json', '');
+						});
+
+						resolve(languages);
+					});
+				}));
+
+				return Promise.all(promises);
 			});
 		return Promise.all(promises);
+	}).then(function(results) {
+		var forms = results.map(function(result) {
+			var form = result[0];
+			form.languages = result[1];
+			return form;
+		});
+
+		return Promise.resolve(forms);
 	});
 }
 

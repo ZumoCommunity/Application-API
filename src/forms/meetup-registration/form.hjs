@@ -1,7 +1,28 @@
-{{<layout}}
-{{$content}}
-
-<h1>Meetup registration</h1>
-
-{{/content}}
-{{/layout}}
+<form class="form-horizontal">
+	<div class="form-group">
+		<label class="col-sm-2 control-label">{{ Lang.Form.FullName }}</label>
+		<div class="col-sm-10">
+			<input type="text" class="form-control" placeholder="{{ Lang.Form.FullName }}">
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="col-sm-2 control-label">{{ Lang.Form.Email }}</label>
+		<div class="col-sm-10">
+			<input type="email" class="form-control" placeholder="{{ Lang.Form.Email }}">
+		</div>
+	</div>
+	<div class="form-group">
+		<div class="col-sm-offset-2 col-sm-10">
+			<div class="checkbox">
+				<label>
+					<input type="checkbox"> {{ Lang.Form.Subscribe }}
+				</label>
+			</div>
+		</div>
+	</div>
+	<div class="form-group">
+		<div class="col-sm-offset-2 col-sm-10">
+			<button type="button" class="btn btn-primary">{{ Lang.Button.Register }}</button>
+		</div>
+	</div>
+</form>
