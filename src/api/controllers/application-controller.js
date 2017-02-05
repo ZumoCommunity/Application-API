@@ -1,10 +1,10 @@
-require('promise');
+var Promise = require('promise');
 
 var appService = require('./../../services/app-service');
 
 module.exports = {
 	getAllApplications: function(req, res) {
-		appService.applications.getAllApplications().then(function(entities) {
+		appService.applications.getAllEntities().then(function(entities) {
 			res.json(entities);
 		});
 	},
@@ -12,7 +12,7 @@ module.exports = {
 	getApplicationById: function(req, res) {
 		var id = req.swagger.params.id.value;
 
-		appService.applications.getApplicationById(id)
+		appService.applications.getEntityById(id)
 			.then(function(entity) {
 				res.json(entity);
 			}, function(error) {
@@ -23,7 +23,7 @@ module.exports = {
 	insertApplication: function(req, res) {
 		var entity = req.swagger.params.entity.value;
 
-		appService.applications.insertApplication(entity)
+		appService.applications.insertEntity(entity)
 			.then(function(entity) {
 				res.json(entity);
 			}, function(error) {
@@ -35,7 +35,7 @@ module.exports = {
 		var id = req.swagger.params.id.value;
 		var entity = req.swagger.params.entity.value;
 
-		appService.applications.updateApplication(id, entity)
+		appService.applications.updateEntity(id, entity)
 			.then(function(entity) {
 				res.json(entity);
 			}, function(error) {
@@ -46,7 +46,7 @@ module.exports = {
 	deleteApplicationById: function(req, res) {
 		var id = req.swagger.params.id.value;
 
-		appService.applications.deleteApplicationById(id)
+		appService.applications.deleteEntityById(id)
 			.then(function() {
 				res.status(200).end();
 			}, function(error) {

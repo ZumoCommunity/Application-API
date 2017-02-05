@@ -1,0 +1,10 @@
+{
+  "Form": {
+    "Email": "Email",
+    "FullName": "Full name",
+    "Subscribe": "Subscribe for community newsletter"
+  },
+  "Button": {
+    "Register": "Register"
+  }
+}
