@@ -12,7 +12,14 @@ app.use('/node_modules', express.static(path.join(__dirname, '..', 'node_modules
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.get('/', function (req, res) {
-	res.send('Hello World!');
+	formSerice.getAllEntities()
+		.then(function(forms) {
+			var html = forms.map(function(form) {
+				return '<a href="/' + form.id + '">' + form.name + '</a><br/>';
+			}).join('');
+
+			res.send(html);
+		});
 });
 
 app.get('/:formId', function (req, res) {
