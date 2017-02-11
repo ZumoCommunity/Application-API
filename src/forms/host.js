@@ -12,13 +12,20 @@ app.use('/node_modules', express.static(path.join(__dirname, '..', 'node_modules
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.get('/', function (req, res) {
-	res.send('Hello World!');
+	formSerice.getAllEntities()
+		.then(function(forms) {
+			var html = forms.map(function(form) {
+				return '<a href="/' + form.id + '">' + form.name + '</a><br/>';
+			}).join('');
+
+			res.send(html);
+		});
 });
 
 app.get('/:formId', function (req, res) {
 	var formId = req.params.formId;
 
-	renderForm(formId, 'en-US', {})
+	renderForm(formId, 'en-US')
 		.then(function(html) {
 			res.send(html);
 		})
@@ -28,13 +35,22 @@ app.post('/:formId', function (req, res) {
 	var formId = req.params.formId;
 	var langId = req.body.langId || 'en-US';
 
-	renderForm(formId, langId, {})
+	var parameters = req.body;
+	delete parameters.langId;
+
+	var props = Object
+		.keys(parameters)
+		.map(function(x) {
+			return { key: x, value: parameters[x] };
+		});
+
+	renderForm(formId, langId, props)
 		.then(function(html) {
 			res.send(html);
 		})
 });
 
-function renderForm(formId, lang, properties) {
+function renderForm(formId, lang, parameters) {
 	var promises = [];
 	promises.push(formSerice.render(formId, lang));
 	promises.push(formSerice.loadTemplate('base.hjs'));
@@ -46,6 +62,8 @@ function renderForm(formId, lang, properties) {
 			var layout = results[1];
 			var form = results[2];
 
+			var props = parameters || form.parameters.map(function (x) { return { key: x }; });
+
 			var model = {
 				langId: lang,
 				languages: form.languages.map(function(language) {
@@ -53,7 +71,8 @@ function renderForm(formId, lang, properties) {
 						selected: language == lang,
 						language: language
 					}
-				})
+				}),
+				parameters: props
 			};
 
 			var html = mustache.render(layout, model, { content: formHtml });
