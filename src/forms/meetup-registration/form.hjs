@@ -1,0 +1,123 @@
+<div id="meetup-registration-{{ Parameters.meetupId }}">
+
+    <div class="hidden" data-bind="css: { 'hidden': state() != 'loading' }">
+        <div class="loader"></div>
+        <div>{{ Lang.Message.Loading }}</div>
+    </div>
+
+    <div class="form-horizontal hidden" data-bind="css: { 'hidden': state() != 'form' }">
+        <div class="form-group" data-bind="css: { 'has-error': !isFullNameValid() }">
+            <label class="col-sm-2 control-label">{{ Lang.Form.FullName }}</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" placeholder="{{ Lang.Form.FullName }}" data-bind="textInput: fullName">
+            </div>
+        </div>
+        <div class="form-group" data-bind="css: { 'has-error': !isEmailValid() }">
+            <label class="col-sm-2 control-label">{{ Lang.Form.Email }}</label>
+            <div class="col-sm-10">
+                <input type="email" class="form-control" placeholder="{{ Lang.Form.Email }}" data-bind="textInput: email">
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" data-bind="textInput: isSubscribe"> {{ Lang.Form.Subscribe }}
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <button type="button" class="btn btn-success" data-bind="enable: isFormValid, click: register">{{ Lang.Button.Register }}</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="hidden" data-bind="css: { 'hidden': state() != 'completed' }">
+        <div class="alert alert-success text-center col-sm-12">
+            <h1><span class="glyphicon glyphicon-thumbs-up"></span></h1>
+            <div>{{ Lang.Message.RegistrationCompleted }}</div>
+        </div>
+        <div class="text-center col-sm-12">
+            <button type="button" class="btn btn-primary" data-bind="click: registerNew">{{ Lang.Button.RegisterNew }}</button>
+        </div>
+    </div>
+
+    <div class="hidden" data-bind="css: { 'hidden': state() != 'error' }">
+        <div class="alert alert-danger text-center col-sm-12">
+            <h1><span class="glyphicon glyphicon-warning-sign"></span></h1>
+            <p>{{ Lang.Message.Error }}</p>
+        </div>
+        <div class="text-center col-sm-12">
+            <button type="button" class="btn btn-primary" data-bind="click: tryAgain">{{ Lang.Button.TryAgain }}</button>
+        </div>
+    </div>
+
+</div>
+
+<script>
+	window.addEventListener('load', function() {
+		var rootNode = document.getElementById('meetup-registration-{{ Parameters.meetupId }}');
+
+		var viewModel = {
+			fullName: ko.observable(''),
+			email: ko.observable(''),
+			isSubscribe: ko.observable(false),
+
+            state: ko.observable('form')
+		};
+
+		viewModel.isFullNameValid = ko.computed(function () {
+			return !!viewModel.fullName();
+		});
+
+		viewModel.isEmailValid = ko.computed(function () {
+			return !!viewModel.email();
+		});
+
+		viewModel.isFormValid = ko.computed(function () {
+			return viewModel.isFullNameValid() && viewModel.isEmailValid();
+		});
+
+		viewModel.register = function() {
+		    viewModel.state('loading');
+
+		    var model = {
+                Email: viewModel.email(),
+                FullName: viewModel.fullName(),
+                IsSubscribeForNews: viewModel.isSubscribe(),
+                MeetupId: '{{ Parameters.meetupId }}'
+            };
+
+            var request = new XMLHttpRequest();
+            request.onreadystatechange = function() {
+                if (request.readyState == 4) {
+                    if (request.status >= 200 && request.status < 300) {
+                        viewModel.state('completed');
+                    } else {
+                        viewModel.state('error');
+                    }
+                }
+            };
+            request.open('POST', '{{{ Configs.MeetupApiEndpoint }}}/odata/v1/Registrations', true);
+            request.setRequestHeader('Content-Type', 'application/json');
+            request.setRequestHeader('Accept', 'application/json');
+            request.send(JSON.stringify(model));
+        };
+
+		viewModel.registerNew = function () {
+		    viewModel.fullName('');
+		    viewModel.email('');
+		    viewModel.isSubscribe(false);
+
+            viewModel.state('form');
+        };
+
+		viewModel.tryAgain = function () {
+            viewModel.state('form');
+        };
+
+		ko.applyBindings(viewModel, rootNode);
+	});
+</script>
