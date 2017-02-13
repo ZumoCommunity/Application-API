@@ -1,5 +1,6 @@
 var _base = require('./_service');
 var lokijs = require('./../data/lokijs');
+var configService = require('./../config-service');
 
 var service = _base.generateAppService(lokijs.names.forms, lokijs);
 
@@ -32,7 +33,14 @@ service.render = function(formId, language, parameters) {
 				var template = responses[1];
 
 				var model = {
-					Lang: lang
+					Lang: lang,
+                    Configs: {
+						MeetupApiEndpoint: configService.MeetupApiEndpoint
+					},
+					Parameters: parameters.reduce(function(result, parameter) {
+						result[parameter.key] = parameter.value;
+						return result;
+					}, {})
 				};
 
 				var html = mustache.render(template, model);
