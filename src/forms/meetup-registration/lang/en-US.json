@@ -1,0 +1,17 @@
+{
+  "Form": {
+    "Email": "Email",
+    "FullName": "Full name",
+    "Subscribe": "Subscribe for community newsletter"
+  },
+  "Button": {
+    "Register": "Register",
+    "RegisterNew": "Register another person",
+    "TryAgain": "Try again"
+  },
+  "Message": {
+    "Loading": "Loading...",
+    "RegistrationCompleted": "Registration completed!",
+    "Error": "Error occurred. Please try again in few minutes."
+  }
+}

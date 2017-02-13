@@ -1,19 +1,32 @@
+var Promise = require('promise');
+
 var should = require('should');
 var request = require('supertest');
+
+process.env.PORT = 20101;
 
 var server = require('./../../../app');
 
 describe('controllers', function() {
 	var tables;
 
-	beforeEach(function(){
+	beforeEach(function(done){
 		tables = require('./../../../services/data-service').tables;
 
-		tables.purge();
-		tables.initialize();
-
-		tables.insertEntity(tables.names.applications, { id: "1", title: "dummy 1", iconUrl: 'http://contoso.com/logo.png' });
-		tables.insertEntity(tables.names.applications, { id: "2", title: "dummy 2", iconUrl: 'http://contoso.com/logo.png' });
+		tables
+			.purge()
+			.then(function() {
+				return tables.initialize();
+			})
+			.then(function() {
+				return Promise.all([
+					tables.insertEntity(tables.names.applications, { id: '1', title: 'dummy 1', iconUrl: 'http://contoso.com/logo.png', webUrl: 'http://contoso.com' }),
+					tables.insertEntity(tables.names.applications, { id: '2', title: 'dummy 2', iconUrl: 'http://contoso.com/logo.png', webUrl: 'http://contoso.com' })
+				]);
+			})
+			.then(function() {
+				done();
+			});
 	});
 
 	describe('application-controller', function() {
