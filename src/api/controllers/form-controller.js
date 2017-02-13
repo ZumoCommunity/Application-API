@@ -34,8 +34,9 @@ module.exports = {
 	renderForm: function(req, res) {
 		var id = req.swagger.params.id.value;
 		var lang = req.swagger.params.lang.value;
+        var parameters = req.swagger.params.parameters.value;
 
-		appService.forms.render(id, lang, {})
+		appService.forms.render(id, lang, parameters)
 			.then(function(html) {
 				html = getMinifiedHtml(html);
 				res.send(html);

@@ -52,7 +52,7 @@ app.post('/:formId', function (req, res) {
 
 function renderForm(formId, lang, parameters) {
 	var promises = [];
-	promises.push(formSerice.render(formId, lang));
+	promises.push(formSerice.render(formId, lang, parameters));
 	promises.push(formSerice.loadTemplate('base.hjs'));
 	promises.push(formSerice.getEntityById(formId));
 
