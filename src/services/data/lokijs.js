@@ -47,9 +47,12 @@ service.getEntityById = function(tableName, id) {
 
 		var entity = table.findOne({ 'id': id });
 
-		entity = removeMetadataProperties(entity);
-
-		resolve(entity);
+		if (!!entity) {
+			entity = removeMetadataProperties(entity);
+			resolve(entity);
+		} else {
+			resolve();
+		}
 	});
 };
 

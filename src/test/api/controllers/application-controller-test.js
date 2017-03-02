@@ -3,6 +3,8 @@ var Promise = require('promise');
 var should = require('should');
 var request = require('supertest');
 
+var networkHelper = require('./../helpers/network-helper');
+
 process.env.PORT = 20101;
 
 var server = require('./../../../app');
@@ -10,7 +12,19 @@ var server = require('./../../../app');
 describe('controllers', function() {
 	var tables;
 
+	before(function (done) {
+		this.timeout(25 * 1000);
+
+		networkHelper
+			.waitPortInUse(process.env.PORT)
+			.then(function() {
+				done();
+			})
+	});
+
 	beforeEach(function(done){
+		this.timeout(5 * 1000);
+
 		tables = require('./../../../services/data-service').tables;
 
 		tables
@@ -24,7 +38,7 @@ describe('controllers', function() {
 					tables.insertEntity(tables.names.applications, { id: '2', title: 'dummy 2', iconUrl: 'http://contoso.com/logo.png', webUrl: 'http://contoso.com' })
 				]);
 			})
-			.then(function() {
+			.then(function () {
 				done();
 			});
 	});
