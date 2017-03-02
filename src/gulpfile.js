@@ -15,7 +15,7 @@ gulp.doneCallback = function (err) {
 
 gulp.task('test', function() {
 	return gulp.src(['test/**/*.js'])
-		.pipe(mocha());
+		.pipe(mocha({reporter: 'mocha-junit-reporter'}));
 });
 
 gulp.task('pre-test-cover', function () {
@@ -26,7 +26,7 @@ gulp.task('pre-test-cover', function () {
 
 gulp.task('test-cover', ['pre-test-cover'], function () {
 	return gulp.src(testFiles)
-		.pipe(mocha())
+		.pipe(mocha({reporter: 'mocha-junit-reporter'}))
 		.pipe(istanbul.writeReports({ dir: './../.coverage' }));
 });
 
