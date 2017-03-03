@@ -5,9 +5,13 @@ var fs = require('fs');
 var istanbul = require('gulp-istanbul');
 var mocha = require('gulp-mocha');
 var zip = require('gulp-zip');
+var inlineCss = require('gulp-inline-css');
+var inlinesource = require('gulp-inline-source');
 
 var sourceFiles = ['api/**/*.js', 'services/**/*.js'];
 var testFiles = ['test/**/*.js'];
+
+var coverageDir = './../.coverage';
 
 gulp.doneCallback = function (err) {
 	process.exit(err ? 1 : 0);
@@ -28,9 +32,28 @@ gulp.task('test-cover', ['pre-test-cover'], function () {
 	return gulp.src(testFiles)
 		.pipe(mocha({reporter: 'mocha-junit-reporter'}))
 		.pipe(istanbul.writeReports({
-			dir: './../.coverage',
-			reporters: ['html', 'cobertura']
+			dir: coverageDir,
+			reporters: ['html', 'cobertura'],
+			reportOpts: {
+				html: {
+					dir: coverageDir + '/html'
+				}
+			}
 		}));
+});
+
+
+gulp.task('inline-css', function() {
+	return gulp.src(coverageDir + '/html/**/*.html')
+		.pipe(inlineCss({
+			applyStyleTags: true,
+			applyLinkTags: true,
+			removeStyleTags: true,
+			removeLinkTags: true,
+			preserveMediaQueries: true
+		}))
+		// .pipe(inlinesource())
+		.pipe(gulp.dest(coverageDir + '/html-inline'));
 });
 
 gulp.task('zip-prod', function() {
