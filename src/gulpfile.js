@@ -28,8 +28,8 @@ gulp.task('test-cover', ['pre-test-cover'], function () {
 	return gulp.src(testFiles)
 		.pipe(mocha({reporter: 'mocha-junit-reporter'}))
 		.pipe(istanbul.writeReports({
-			dir: './../coverage',
-			reporters: ['cobertura']
+			dir: './../.coverage',
+			reporters: ['html', 'cobertura']
 		}));
 });
 
