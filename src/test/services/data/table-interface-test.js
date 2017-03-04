@@ -8,7 +8,8 @@ var methods = [
 	'insertEntity',
 	'updateEntity',
 	'isIdExists',
-	'purge'
+	'purge',
+	'checkHealth'
 ];
 
 var implementations = [
