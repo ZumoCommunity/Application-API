@@ -5,9 +5,13 @@ var fs = require('fs');
 var istanbul = require('gulp-istanbul');
 var mocha = require('gulp-mocha');
 var zip = require('gulp-zip');
+var inlineCss = require('gulp-inline-css');
+var inlinesource = require('gulp-inline-source');
 
 var sourceFiles = ['api/**/*.js', 'services/**/*.js'];
 var testFiles = ['test/**/*.js'];
+
+var coverageDir = './../.coverage';
 
 gulp.doneCallback = function (err) {
 	process.exit(err ? 1 : 0);
@@ -15,7 +19,7 @@ gulp.doneCallback = function (err) {
 
 gulp.task('test', function() {
 	return gulp.src(['test/**/*.js'])
-		.pipe(mocha());
+		.pipe(mocha({reporter: 'mocha-junit-reporter'}));
 });
 
 gulp.task('pre-test-cover', function () {
@@ -26,8 +30,30 @@ gulp.task('pre-test-cover', function () {
 
 gulp.task('test-cover', ['pre-test-cover'], function () {
 	return gulp.src(testFiles)
-		.pipe(mocha())
-		.pipe(istanbul.writeReports({ dir: './../.coverage' }));
+		.pipe(mocha({reporter: 'mocha-junit-reporter'}))
+		.pipe(istanbul.writeReports({
+			dir: coverageDir,
+			reporters: ['html', 'cobertura'],
+			reportOpts: {
+				html: {
+					dir: coverageDir + '/html'
+				}
+			}
+		}));
+});
+
+
+gulp.task('inline-css', function() {
+	return gulp.src(coverageDir + '/html/**/*.html')
+		.pipe(inlineCss({
+			applyStyleTags: true,
+			applyLinkTags: true,
+			removeStyleTags: true,
+			removeLinkTags: true,
+			preserveMediaQueries: true
+		}))
+		// .pipe(inlinesource())
+		.pipe(gulp.dest(coverageDir + '/html-inline'));
 });
 
 gulp.task('zip-prod', function() {

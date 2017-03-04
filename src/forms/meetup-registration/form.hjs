@@ -2,7 +2,7 @@
 
     <div class="hidden" data-bind="css: { 'hidden': state() != 'loading' }">
         <div class="loader"></div>
-        <div>{{ Lang.Message.Loading }}</div>
+        <div class="text-center">{{ Lang.Message.Loading }}</div>
     </div>
 
     <div class="form-horizontal hidden" data-bind="css: { 'hidden': state() != 'form' }">
