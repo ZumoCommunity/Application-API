@@ -107,4 +107,18 @@ service.isIdExists = function(tableName, id) {
 	});
 };
 
+service.checkHealth = function() {
+	return new Promise(function (resolve, reject) {
+		var keys = Object.keys(service.names);
+		for (var i = 0; i < keys.length; i++) {
+			var tableName = service.names[keys[i]];
+			if (db.getCollection(tableName) == null) {
+				reject();
+				return;
+			}
+		}
+		resolve();
+	});
+};
+
 module.exports = service;

@@ -54,4 +54,10 @@ service.isIdExists = function(tableName, id) {
 	});
 };
 
+service.checkHealth = function() {
+	return new Promise(function (resolve, reject) {
+		throw 'Not implemented method';
+	});
+};
+
 module.exports = service;
