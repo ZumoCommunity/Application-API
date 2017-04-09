@@ -63,7 +63,7 @@
 		var viewModel = {
 			fullName: ko.observable(''),
 			email: ko.observable(''),
-			isSubscribe: ko.observable(false),
+			isSubscribe: ko.observable(true),
 
             state: ko.observable('form')
 		};
@@ -109,7 +109,7 @@
 		viewModel.registerNew = function () {
 		    viewModel.fullName('');
 		    viewModel.email('');
-		    viewModel.isSubscribe(false);
+		    viewModel.isSubscribe(true);
 
             viewModel.state('form');
         };
